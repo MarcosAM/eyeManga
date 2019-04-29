@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.foolproductions.eyemanga.mangaEdenApi.MangaList;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -30,13 +32,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     @Override
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
-        mangaViewHolder.situation.setText(mangas.get(i).getS());
-        List<String> categoriesList = mangas.get(i).getC();
-        String categories = "";
-        for (int j = 0; j < categoriesList.size(); j++) {
-            categories += categoriesList.get(j) + ", ";
-        }
-        mangaViewHolder.categories.setText(categories);
+        Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).into(mangaViewHolder.cover);
     }
 
     @Override
@@ -46,14 +42,14 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
 
     public static class MangaViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, situation, categories;
+        TextView title;
+        ImageView cover;
 
         public MangaViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.tvTitle);
-            situation = itemView.findViewById(R.id.tvSituation);
-            categories = itemView.findViewById(R.id.tvCategories);
+            cover = itemView.findViewById(R.id.ivCover);
         }
     }
 }

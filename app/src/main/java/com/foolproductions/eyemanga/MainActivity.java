@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     void initializeRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.rvMangaList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new MangaRVAdapter(MangaManager.getMangaListItens()));
         recyclerView.setHasFixedSize(true);
