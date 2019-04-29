@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
@@ -40,16 +41,28 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
         return mangas.size();
     }
 
+    public void updateList(List<MangaListItem> mangas) {
+        this.mangas = mangas;
+        notifyDataSetChanged();
+    }
+
     public static class MangaViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
         ImageView cover;
 
-        public MangaViewHolder(@NonNull View itemView) {
+        public MangaViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.tvTitle);
             cover = itemView.findViewById(R.id.ivCover);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(itemView.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
