@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
@@ -56,9 +58,20 @@ public class MainActivity extends AppCompatActivity {
                     categories.add(category);
                     Log.v("Main Activity", category);
 
-                    Chip chip = new Chip(MainActivity.this);
+                    final Chip chip = new Chip(MainActivity.this);
                     chip.setCheckable(true);
                     chip.setText(category);
+                    chip.setId(View.generateViewId());
+
+                    chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b) {
+                                Toast.makeText(MainActivity.this, chip.getText(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                     chipGroup.addView(chip);
                 }
             }
