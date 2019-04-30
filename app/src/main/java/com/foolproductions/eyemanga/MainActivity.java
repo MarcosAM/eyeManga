@@ -1,11 +1,13 @@
 package com.foolproductions.eyemanga;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +32,8 @@ public class MainActivity extends AppCompatActivity {
         MangaManager.initialize(new MangaManager.MangaManagerInitializationListener() {
             @Override
             public void onSuccess() {
-                List<MangaListItem> mangaListItens = MangaManager.getMangaListItens();
-                for (int i = 0; i < mangaListItens.size(); i++) {
-                    initializeRecyclerView();
-                }
+                initializeRecyclerView();
+                printAllCategories();
             }
 
             @Override
@@ -40,6 +42,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    void printAllCategories() {
+        List<MangaListItem> mangas = MangaManager.getMangaListItens();
+        List<String> categories = new ArrayList<>();
+
+        ChipGroup chipGroup = findViewById(R.id.cgMangaFilter);
+
+        for (MangaListItem manga : mangas) {
+            for (String category : manga.getC()) {
+                if (!categories.contains(category)) {
+                    categories.add(category);
+                    Log.v("Main Activity", category);
+
+                    Chip chip = new Chip(MainActivity.this);
+                    chip.setCheckable(true);
+                    chip.setText(category);
+                    chipGroup.addView(chip);
+                }
+            }
+        }
     }
 
     void initializeRecyclerView() {
