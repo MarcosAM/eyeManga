@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
@@ -24,10 +25,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    ProgressBar progressBar;
+    RecyclerView recyclerView;
+    ChipGroup chipGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        chipGroup = findViewById(R.id.cgMangaFilter);
+        recyclerView = findViewById(R.id.rvMangaList);
+        progressBar = findViewById(R.id.pbMainActivity);
+
+        setIsLoading(true);
 
         //Inicializa o Manga Manager!
         MangaManager.initialize(new MangaManager.MangaManagerInitializationListener() {
@@ -35,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess() {
                 initializeRecyclerView();
                 createFilterChips();
+                setIsLoading(false);
             }
 
             @Override
@@ -47,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     void createFilterChips() {
         List<String> categories = MangaManager.getCategories();
-
-        ChipGroup chipGroup = findViewById(R.id.cgMangaFilter);
 
         for (String category : categories) {
             final Chip chip = new Chip(MainActivity.this);
@@ -70,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initializeRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.rvMangaList);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new MangaRVAdapter(MangaManager.getMangaListItens()));
@@ -107,5 +116,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    void setIsLoading(Boolean isLoading) {
+        if (isLoading) {
+            recyclerView.setVisibility(View.GONE);
+            chipGroup.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            chipGroup.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }
