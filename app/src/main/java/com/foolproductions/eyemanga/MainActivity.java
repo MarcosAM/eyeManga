@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 initializeRecyclerView();
-                printAllCategories();
+                createFilterChips();
             }
 
             @Override
@@ -46,35 +45,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void printAllCategories() {
-        List<MangaListItem> mangas = MangaManager.getMangaListItens();
-        List<String> categories = new ArrayList<>();
+    void createFilterChips() {
+        List<String> categories = MangaManager.getCategories();
 
         ChipGroup chipGroup = findViewById(R.id.cgMangaFilter);
 
-        for (MangaListItem manga : mangas) {
-            for (String category : manga.getC()) {
-                if (!categories.contains(category)) {
-                    categories.add(category);
-                    Log.v("Main Activity", category);
+        for (String category : categories) {
+            final Chip chip = new Chip(MainActivity.this);
+            chip.setCheckable(true);
+            chip.setText(category);
+            chip.setId(View.generateViewId());
 
-                    final Chip chip = new Chip(MainActivity.this);
-                    chip.setCheckable(true);
-                    chip.setText(category);
-                    chip.setId(View.generateViewId());
-
-                    chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            if (b) {
-                                Toast.makeText(MainActivity.this, chip.getText(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-                    chipGroup.addView(chip);
+            chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        Toast.makeText(MainActivity.this, chip.getText(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
+            });
+
+            chipGroup.addView(chip);
         }
     }
 

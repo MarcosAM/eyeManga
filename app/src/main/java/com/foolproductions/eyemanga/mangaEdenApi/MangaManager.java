@@ -1,10 +1,6 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
-import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenService;
-import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
-import com.foolproductions.eyemanga.mangaEdenApi.MangaList;
-import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -16,8 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MangaManager {
 
     private static MangaList mangaList;
+    private static List<String> categories = new ArrayList<>();
 
-    public static void initialize(final MangaManagerInitializationListener listiner) {
+    public static void initialize(final MangaManagerInitializationListener listener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MangaEdenURLs.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -29,21 +26,38 @@ public class MangaManager {
             public void onResponse(Call<MangaList> call, Response<MangaList> response) {
                 if (response.isSuccessful()) {
                     mangaList = response.body();
-                    listiner.onSuccess();
+                    fetchCategories();
+                    listener.onSuccess();
                 } else {
-                    listiner.onFailure();
+                    listener.onFailure();
                 }
             }
 
             @Override
             public void onFailure(Call<MangaList> call, Throwable t) {
-                listiner.onFailure();
+                listener.onFailure();
             }
         });
     }
 
+    static void fetchCategories() {
+        List<MangaListItem> mangas = mangaList.getManga();
+
+        for (MangaListItem manga : mangas) {
+            for (String category : manga.getC()) {
+                if (!categories.contains(category)) {
+                    categories.add(category);
+                }
+            }
+        }
+    }
+
     public static List<MangaListItem> getMangaListItens() {
         return mangaList.getManga();
+    }
+
+    public static List<String> getCategories() {
+        return categories;
     }
 
     public interface MangaManagerInitializationListener {
