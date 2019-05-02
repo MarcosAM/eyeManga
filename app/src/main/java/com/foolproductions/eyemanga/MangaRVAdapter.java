@@ -44,7 +44,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     @Override
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
-        Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).into(mangaViewHolder.cover);
+        Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.placeholder_cover).into(mangaViewHolder.cover);
     }
 
     @Override
