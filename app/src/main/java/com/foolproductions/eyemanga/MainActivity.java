@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 import com.google.android.material.chip.Chip;
@@ -39,23 +38,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rvMangaList);
         progressBar = findViewById(R.id.pbMainActivity);
 
-        setIsLoading(true);
-
-        //Inicializa o Manga Manager!
-        MangaManager.initialize(new MangaManager.MangaManagerInitializationListener() {
-            @Override
-            public void onSuccess() {
-                initializeRecyclerView();
-                createFilterChips();
-                setIsLoading(false);
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_LONG).show();
-            }
-        });
-
+        setIsLoading(false);
+        initializeRecyclerView();
+        createFilterChips();
     }
 
     void createFilterChips() {
