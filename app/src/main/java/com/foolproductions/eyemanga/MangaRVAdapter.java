@@ -3,6 +3,7 @@ package com.foolproductions.eyemanga;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
         Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.placeholder_cover).into(mangaViewHolder.cover);
+        mangaViewHolder.mangaId = mangas.get(i).getI();
     }
 
     @Override
@@ -146,6 +148,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
 
         TextView title;
         ImageView cover;
+        String mangaId;
 
         public MangaViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -156,7 +159,11 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(itemView.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(itemView.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(itemView.getContext(), MangaActivity.class);
+                    //TODO definir quem é o responsável por essa constante que será "id" por enquanto
+                    intent.putExtra("id", mangaId);
+                    itemView.getContext().startActivity(intent);
                 }
             });
         }

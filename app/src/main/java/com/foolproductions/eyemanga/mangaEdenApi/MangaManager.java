@@ -1,5 +1,8 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +16,14 @@ public class MangaManager {
 
     private static MangaList mangaList;
     private static List<String> categories = new ArrayList<>();
+    private static MangaEdenService service;
 
     public static void initialize(final MangaManagerInitializationListener listener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MangaEdenURLs.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        MangaEdenService service = retrofit.create(MangaEdenService.class);
+        service = retrofit.create(MangaEdenService.class);
         Call<MangaList> mangaListCall = service.getMangaList();
         mangaListCall.enqueue(new Callback<MangaList>() {
             @Override
@@ -60,8 +64,33 @@ public class MangaManager {
         return categories;
     }
 
+    public static void setFetchMangaListener(final FetchMangaListener listener, String mangaId) {
+        Call<Manga> mangaCall = service.getManga(mangaId);
+        mangaCall.enqueue(new Callback<Manga>() {
+            @Override
+            public void onResponse(Call<Manga> call, Response<Manga> response) {
+                if (response.isSuccessful()) {
+                    listener.onSuccess(response.body());
+                } else {
+                    listener.onFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Manga> call, Throwable t) {
+                listener.onFailure();
+            }
+        });
+    }
+
     public interface MangaManagerInitializationListener {
         public void onSuccess();
+
+        public void onFailure();
+    }
+
+    public interface FetchMangaListener {
+        public void onSuccess(Manga manga);
 
         public void onFailure();
     }
