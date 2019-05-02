@@ -15,12 +15,10 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     RecyclerView recyclerView;
     ChipGroup chipGroup;
+    MangaRVAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
     void initializeRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new MangaRVAdapter(MangaManager.getMangaListItens()));
+        adapter = new MangaRVAdapter(MangaManager.getMangaListItens());
+        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
     }
 
@@ -99,20 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                String userInput = s.toLowerCase();
-                List<MangaListItem> mangaList = MangaManager.getMangaListItens();
-                List<MangaListItem> newMangaList = new ArrayList<>();
-
-                for (MangaListItem manga : mangaList) {
-                    if (manga.getT().toLowerCase().contains(userInput)) {
-                        newMangaList.add(manga);
-                    }
-                }
-
-                RecyclerView recyclerView = findViewById(R.id.rvMangaList);
-                ((MangaRVAdapter) recyclerView.getAdapter()).updateList(newMangaList);
-
-                return true;
+                adapter.getFilter().filter(s);
+                return false;
             }
         });
         return true;
