@@ -159,10 +159,8 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(itemView.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(itemView.getContext(), MangaActivity.class);
-                    //TODO definir quem é o responsável por essa constante que será "id" por enquanto
-                    intent.putExtra("id", mangaId);
+                    intent.putExtra(MangaActivity.EXTRA_NAME, mangaId);
                     itemView.getContext().startActivity(intent);
                 }
             });

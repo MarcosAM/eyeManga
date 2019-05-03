@@ -11,6 +11,7 @@ public class Manga {
     String author;
     String artist;
     List<String> categories;
+    List<List<String>> chapters;
 
     public String getTitle() {
         return title;
@@ -66,5 +67,13 @@ public class Manga {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public List<List<String>> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<List<String>> chapters) {
+        this.chapters = chapters;
     }
 }
