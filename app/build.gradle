@@ -36,4 +36,6 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
 
     implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'org.apache.commons:commons-text:1.6'
 }
