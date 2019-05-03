@@ -42,4 +42,5 @@ dependencies {
 
     implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:2.0.0@aar'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 }

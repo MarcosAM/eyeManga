@@ -64,7 +64,7 @@ public class MangaManager {
         return categories;
     }
 
-    public static void setFetchMangaListener(final FetchMangaListener listener, String mangaId) {
+    /*public static void setFetchMangaListener(final FetchMangaListener listener, String mangaId) {
         Call<Manga> mangaCall = service.getManga(mangaId);
         mangaCall.enqueue(new Callback<Manga>() {
             @Override
@@ -81,7 +81,7 @@ public class MangaManager {
                 listener.onFailure();
             }
         });
-    }
+    }*/
 
     public interface MangaManagerInitializationListener {
         public void onSuccess();
@@ -89,9 +89,9 @@ public class MangaManager {
         public void onFailure();
     }
 
-    public interface FetchMangaListener {
+    /*public interface FetchMangaListener {
         public void onSuccess(Manga manga);
 
         public void onFailure();
-    }
+    }*/
 }

@@ -1,6 +1,8 @@
 package com.foolproductions.eyemanga;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -24,6 +26,8 @@ public class MangaActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private SmartTabLayout smartTabLayout;
 
+    private MangaViewModel mangaViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,9 @@ public class MangaActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewpager);
         smartTabLayout = findViewById(R.id.viewpagertab);
+
+        mangaViewModel = ViewModelProviders.of(this).get(MangaViewModel.class);
+        mangaViewModel.setMangaId(getIntent().getStringExtra(EXTRA_NAME));
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(),
@@ -44,8 +51,7 @@ public class MangaActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         smartTabLayout.setViewPager(viewPager);
 
-        final String mangaId = getIntent().getStringExtra(EXTRA_NAME);
-        MangaManager.setFetchMangaListener(new MangaManager.FetchMangaListener() {
+        /*MangaManager.setFetchMangaListener(new MangaManager.FetchMangaListener() {
             @Override
             public void onSuccess(Manga manga) {
                 //if (tvTitle != null)
@@ -56,6 +62,6 @@ public class MangaActivity extends AppCompatActivity {
             @Override
             public void onFailure() {
             }
-        }, mangaId);
+        }, mangaId);*/
     }
 }
