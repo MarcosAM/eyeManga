@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
@@ -103,32 +101,6 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             notifyDataSetChanged();
         }
     };
-
-    /*Filter categoryFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            if (selectedCategories.size() > 0) {
-                availableMangas.clear();
-                for (MangaListItem manga : allMangas) {
-                    if (manga.getC().containsAll(selectedCategories)) {
-                        availableMangas.add(manga);
-                    }
-                }
-            } else {
-                availableMangas.clear();
-                availableMangas.addAll(allMangas);
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = charSequence;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            getFilter().filter((CharSequence) filterResults.values);
-        }
-    };*/
 
     public void addCategoryFilter(String category, CharSequence searchInput) {
         if (MangaManager.getCategories().contains(category)) {

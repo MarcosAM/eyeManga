@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!--TODO acho que da para tirar esse Relative Layout e organizar as views dentro do Card
+    View-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -7,7 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.foolproductions.eyemanga.fragments.AboutFragment;
-import com.foolproductions.eyemanga.fragments.ChaptersFragment;
+import com.foolproductions.eyemanga.chaptersTab.ChaptersFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
