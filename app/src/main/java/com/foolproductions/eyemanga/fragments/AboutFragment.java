@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,7 @@ public class AboutFragment extends Fragment {
             tvArtist.setVisibility(View.GONE);
         }
         tvDescription.setText(StringEscapeUtils.unescapeHtml4(manga.getDescription()));
+        Log.v("About", ivCover.getDrawable().getIntrinsicWidth() + " x " + ivCover.getDrawable().getIntrinsicHeight());
     }
 
     void setIsLoading(Boolean isLoading) {

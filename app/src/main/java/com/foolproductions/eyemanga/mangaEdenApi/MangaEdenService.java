@@ -12,4 +12,7 @@ public interface MangaEdenService {
     @GET(MangaEdenURLs.MANGA_URL)
     public Call<Manga> getManga(@Path(MangaEdenURLs.MANGA_PATH) String mangaId);
 
+    @GET(MangaEdenURLs.CHAPTER_URL)
+    public Call<Chapter> getChapter(@Path(MangaEdenURLs.CHAPTER_PATH) String chapterId);
+
 }

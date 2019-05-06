@@ -6,5 +6,7 @@ public class MangaEdenURLs {
     public static final String IMAGE_URL = "https://cdn.mangaeden.com/mangasimg/";
     public static final String MANGA_URL = "manga/{id}/";
     public static final String MANGA_PATH = "id";
+    public static final String CHAPTER_URL = "chapter/{id}/";
+    public static final String CHAPTER_PATH = "id";
 
 }
