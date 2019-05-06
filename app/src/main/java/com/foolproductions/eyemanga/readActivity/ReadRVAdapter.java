@@ -1,7 +1,5 @@
 package com.foolproductions.eyemanga.readActivity;
 
-import android.graphics.Matrix;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHolder> {
@@ -25,6 +23,7 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
     public ReadRVAdapter(List<List<String>> images) {
         this.images = new ArrayList<>();
         this.images.addAll(images);
+        Collections.reverse(this.images);
     }
 
     @NonNull
@@ -36,7 +35,7 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ReadViewHolder holder, int position) {
-        Picasso.get().load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1)).error(R.drawable.placeholder_cover).into(holder.imageView);
+        Picasso.get().load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1)).transform(new CheckForRotationTransformation()).error(R.drawable.placeholder_cover).into(holder.imageView);
     }
 
     @Override
