@@ -40,4 +40,12 @@ public class ReadActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        //TODO prestar atenção pq pode acabar retornando nulo
+        Log.v("Read Activity", "Última página lida foi " + layoutManager.findFirstVisibleItemPosition());
+        super.onDestroy();
+    }
 }

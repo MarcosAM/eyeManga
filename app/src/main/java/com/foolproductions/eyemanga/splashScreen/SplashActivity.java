@@ -3,6 +3,7 @@ package com.foolproductions.eyemanga.splashScreen;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.foolproductions.eyemanga.MainActivity;
@@ -15,6 +16,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        initializeDatabase();
 
         MangaManager.initialize(new MangaManager.MangaManagerInitializationListener() {
             @Override
@@ -29,5 +32,9 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    void initializeDatabase() {
+        //TODO ver isso aqui
     }
 }
