@@ -3,13 +3,15 @@ package com.foolproductions.eyemanga.readActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,8 +36,24 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReadViewHolder holder, int position) {
-        Picasso.get().load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1)).transform(new CheckForRotationTransformation()).error(R.drawable.placeholder_cover).into(holder.imageView);
+    public void onBindViewHolder(@NonNull final ReadViewHolder holder, int position) {
+        holder.progressBar.setVisibility(View.VISIBLE);
+        holder.photoView.setVisibility(View.GONE);
+        Picasso.get()
+                .load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1))
+                .transform(new CheckForRotationTransformation()).error(R.drawable.placeholder_cover).
+                into(holder.photoView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.progressBar.setVisibility(View.GONE);
+                        holder.photoView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        //TODO mudar baseado nas possíveis exceções
+                    }
+                });
     }
 
     @Override
@@ -44,12 +62,14 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
     }
 
     public static class ReadViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
+        private PhotoView photoView;
+        private ProgressBar progressBar;
 
         public ReadViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.ivMangaPage);
+            photoView = itemView.findViewById(R.id.pvMangaPage);
+            progressBar = itemView.findViewById(R.id.pbPage);
         }
     }
 }
