@@ -60,7 +60,6 @@ public class HistoricDAO implements IHistoricDAO {
         String sql = "SELECT * FROM " + DBHelper.TABLE_MANGAS + " ;";
         Cursor cursor = read.rawQuery(sql, null);
 
-        cursor.moveToFirst();
         while (cursor.moveToNext()) {
             ReadingHistoric historic = new ReadingHistoric();
             //TODO criar um construtor para colocar isso "automaticamente"
@@ -82,8 +81,7 @@ public class HistoricDAO implements IHistoricDAO {
 
     public ReadingHistoric getReadingHistoric(String mangaId) {
         ReadingHistoric readingHistoric = null;
-        Cursor cursor = read.rawQuery("SELECT * FROM " + DBHelper.TABLE_MANGAS + " WHERE " + DBHelper.ID_COLUMN + " = '" + mangaId + "' ;", null);
-        cursor.moveToFirst();
+        Cursor cursor = read.rawQuery("SELECT * FROM " + DBHelper.TABLE_MANGAS + " WHERE " + DBHelper.ID_COLUMN + "=? ;", new String[]{mangaId});
         while (cursor.moveToNext()) {
             readingHistoric = new ReadingHistoric();
             readingHistoric.setId(cursor.getString(cursor.getColumnIndex(DBHelper.ID_COLUMN)));

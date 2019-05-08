@@ -20,6 +20,7 @@ import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
 public class ReadActivity extends AppCompatActivity {
 
     public static final String EXTRA_NAME = "chapterId";
+    public static final String EXTRA_PAGE = "page";
 
     private RecyclerView recyclerView;
     private ReadViewModel readViewModel;
@@ -41,6 +42,10 @@ public class ReadActivity extends AppCompatActivity {
                 ReadRVAdapter adapter = new ReadRVAdapter(chapter.getImages());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
+                //TODO ver isso aqui
+                if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
+                    recyclerView.scrollToPosition(getIntent().getIntExtra(EXTRA_PAGE, 0));
+                }
             }
         });
     }

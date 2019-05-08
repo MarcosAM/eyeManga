@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.MangaRVAdapter;
 import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
+import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
+import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.readActivity.ReadActivity;
 import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
@@ -33,6 +36,8 @@ public class ChaptersFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MangaViewModel mangaViewModel;
+    private Button btnContinue;
+    private ReadingHistoric historic;
 
     public ChaptersFragment() {
 
@@ -45,6 +50,7 @@ public class ChaptersFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chapters, container, false);
         recyclerView = view.findViewById(R.id.rvChapters);
+        btnContinue = view.findViewById(R.id.btnContinue);
 
         mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
         mangaViewModel.getManga().observe(this, new Observer<Manga>() {
@@ -77,9 +83,35 @@ public class ChaptersFragment extends Fragment {
                 recyclerView.addItemDecoration(new DividerItemDecoration(container.getContext(), LinearLayout.VERTICAL));
 
                 recyclerView.setHasFixedSize(true);
+
+                //TODO organizar isso aqui
+                HistoricDAO dao = new HistoricDAO(getContext());
+                String mangaId = getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME);
+                if (dao.checkIfExists(mangaId)) {
+                    btnContinue.setVisibility(View.VISIBLE);
+                    historic = dao.getReadingHistoric(mangaId);
+                    btnContinue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            continueReadingFromLastPage();
+                        }
+                    });
+                }
             }
         });
         return view;
     }
 
+    public void continueReadingFromLastPage() {
+        //TODO reaproveitar o código acima
+        if (historic != null) {
+            Intent intent = new Intent(getContext(), ReadActivity.class);
+            intent.putExtra(ReadActivity.EXTRA_NAME, historic.getChapterId());
+            intent.putExtra(MangaActivity.EXTRA_NAME, historic.getId());
+            intent.putExtra(ReadActivity.EXTRA_PAGE, historic.getPage());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Histórico nulo, fuck!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
