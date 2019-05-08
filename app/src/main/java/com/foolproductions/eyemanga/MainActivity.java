@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 
+import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
+import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -42,6 +45,15 @@ public class MainActivity extends AppCompatActivity {
         setIsLoading(false);
         initializeRecyclerView();
         createFilterChips();
+
+        //TODO deletar isso aqui
+        HistoricDAO dao = new HistoricDAO(MainActivity.this);
+        List<ReadingHistoric> historics = dao.getList();
+        for (ReadingHistoric historic : historics) {
+            Log.i("Debbuging", " ID: " + historic.getId());
+            Log.i("Debbuging", " Chapter ID " + historic.getChapterId());
+            Log.i("Debbuging", "Última página " + String.valueOf(historic.getPage()));
+        }
     }
 
     void createFilterChips() {

@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_MANGAS + " ( " + ID_COLUMN + " VARCHAR PRIMARY KEY," + CHAPTER_COLUMN + " TEXT, " + PAGE_COLUMN + " INT(3))";
+        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_MANGAS + " ( " + ID_COLUMN + " TEXT PRIMARY KEY," + CHAPTER_COLUMN + " TEXT, " + PAGE_COLUMN + " INT(3))";
 
         try {
             sqLiteDatabase.execSQL(sql);

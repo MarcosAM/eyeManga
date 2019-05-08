@@ -1,6 +1,7 @@
 package com.foolproductions.eyemanga.chaptersTab;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,12 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.MangaRVAdapter;
 import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
+import com.foolproductions.eyemanga.readActivity.ReadActivity;
+import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,12 +49,31 @@ public class ChaptersFragment extends Fragment {
         mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
         mangaViewModel.getManga().observe(this, new Observer<Manga>() {
             @Override
-            public void onChanged(Manga manga) {
+            public void onChanged(final Manga manga) {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext());
                 recyclerView.setLayoutManager(layoutManager);
                 ChapterRVAdapter adapter = new ChapterRVAdapter(manga.getChapters());
                 recyclerView.setAdapter(adapter);
 
+                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity().getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getContext(), ReadActivity.class);
+                        intent.putExtra(ReadActivity.EXTRA_NAME, manga.getChapters().get(position).get(3));
+                        intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }));
                 recyclerView.addItemDecoration(new DividerItemDecoration(container.getContext(), LinearLayout.VERTICAL));
 
                 recyclerView.setHasFixedSize(true);

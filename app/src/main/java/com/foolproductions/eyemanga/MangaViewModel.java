@@ -44,4 +44,8 @@ public class MangaViewModel extends ViewModel {
             });
         }
     }
+
+    public String getMangaId() {
+        return mangaId;
+    }
 }

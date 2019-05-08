@@ -3,6 +3,7 @@ package com.foolproductions.eyemanga.historicDatabase;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ public class HistoricDAO implements IHistoricDAO {
     SQLiteDatabase read;
     SQLiteDatabase write;
 
+
+    //TODO transformar tudo isso aqui numa classe static
     public HistoricDAO(Context context) {
         DBHelper helper = new DBHelper(context);
 
@@ -75,6 +78,25 @@ public class HistoricDAO implements IHistoricDAO {
         cursor.close();
 
         return historics;
+    }
+
+    public ReadingHistoric getReadingHistoric(String mangaId) {
+        ReadingHistoric readingHistoric = null;
+        Cursor cursor = read.rawQuery("SELECT * FROM " + DBHelper.TABLE_MANGAS + " WHERE " + DBHelper.ID_COLUMN + " = '" + mangaId + "' ;", null);
+        cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            readingHistoric = new ReadingHistoric();
+            readingHistoric.setId(cursor.getString(cursor.getColumnIndex(DBHelper.ID_COLUMN)));
+            readingHistoric.setChapterId(cursor.getString(cursor.getColumnIndex(DBHelper.CHAPTER_COLUMN)));
+            readingHistoric.setPage(cursor.getInt(cursor.getColumnIndex(DBHelper.PAGE_COLUMN)));
+        }
+        cursor.close();
+        return readingHistoric;
+    }
+
+    public boolean checkIfExists(String mangaId) {
+        long count = DatabaseUtils.queryNumEntries(read, DBHelper.TABLE_MANGAS, "id = ?", new String[]{mangaId});
+        return count > 0;
     }
 
     ContentValues convertHistoricToContentValues(ReadingHistoric historic) {

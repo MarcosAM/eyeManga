@@ -14,7 +14,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class MangaActivity extends AppCompatActivity {
 
-    public static final String EXTRA_NAME = "id";
+    public static final String EXTRA_NAME = "mangaId";
 
     private ViewPager viewPager;
     private SmartTabLayout smartTabLayout;

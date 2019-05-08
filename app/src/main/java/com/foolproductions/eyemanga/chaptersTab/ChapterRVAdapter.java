@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.readActivity.ReadActivity;
 
@@ -32,7 +33,7 @@ public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.Chap
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
         holder.textView.setText(chapters.get(position).get(0) + " " + chapters.get(position).get(2));
-        holder.chapterId = chapters.get(position).get(3);
+        //holder.chapterId = chapters.get(position).get(3);
     }
 
     @Override
@@ -43,13 +44,14 @@ public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.Chap
     public static class ChapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
-        String chapterId;
+        //String chapterId;
 
         public ChapterViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.tvChapter);
-
+            //TODO deletar isso aqui
+            /*
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -57,7 +59,7 @@ public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.Chap
                     intent.putExtra(ReadActivity.EXTRA_NAME, chapterId);
                     itemView.getContext().startActivity(intent);
                 }
-            });
+            });*/
         }
     }
 }
