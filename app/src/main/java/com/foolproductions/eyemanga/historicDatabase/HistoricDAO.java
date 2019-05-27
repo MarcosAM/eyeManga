@@ -27,11 +27,22 @@ public class HistoricDAO implements IHistoricDAO {
     @Override
     public boolean save(ReadingHistoric historic) {
 
-        try {
-            write.insert(DBHelper.TABLE_MANGAS, null, convertHistoricToContentValues(historic));
-        } catch (Exception e) {
-            Log.i("Debbuging", "Falha ao salvar o histórico novo");
-            return false;
+        if (checkIfExists(historic.getId())) {
+            try {
+                write.update(DBHelper.TABLE_MANGAS, convertHistoricToContentValues(historic), DBHelper.ID_COLUMN + "=?", new String[]{historic.getId()});
+                Log.i("Debbuging", "Deu certo atualizar o histórico");
+            } catch (Exception e) {
+                Log.i("Debbuging", "Falha ao atualizar o histórico");
+                return false;
+            }
+        } else {
+            try {
+                write.insert(DBHelper.TABLE_MANGAS, null, convertHistoricToContentValues(historic));
+                Log.i("Debbuging", "Deu certo salvar o histórico");
+            } catch (Exception e) {
+                Log.i("Debbuging", "Falha ao salvar o histórico novo");
+                return false;
+            }
         }
 
         return true;
