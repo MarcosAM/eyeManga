@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +30,7 @@ public class HistoricDAO implements IHistoricDAO {
         try {
             write.insert(DBHelper.TABLE_MANGAS, null, convertHistoricToContentValues(historic));
         } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean update(ReadingHistoric historic) {
-
-        try {
-            write.update(DBHelper.TABLE_MANGAS, convertHistoricToContentValues(historic), DBHelper.ID_COLUMN + "=?", new String[]{historic.getId()});
-        } catch (Exception e) {
+            Log.i("Debbuging", "Falha ao salvar o histórico novo");
             return false;
         }
 

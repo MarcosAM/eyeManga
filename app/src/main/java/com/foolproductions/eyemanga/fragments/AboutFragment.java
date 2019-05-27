@@ -92,7 +92,6 @@ public class AboutFragment extends Fragment {
             tvArtist.setVisibility(View.GONE);
         }
         tvDescription.setText(StringEscapeUtils.unescapeHtml4(manga.getDescription()));
-        Log.v("About", ivCover.getDrawable().getIntrinsicWidth() + " x " + ivCover.getDrawable().getIntrinsicHeight());
     }
 
     void setIsLoading(Boolean isLoading) {
