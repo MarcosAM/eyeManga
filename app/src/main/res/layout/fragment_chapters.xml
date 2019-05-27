@@ -7,13 +7,6 @@
     tools:context=".chaptersTab.ChaptersFragment">
 
 
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:visibility="gone" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvChapters"
         android:layout_width="match_parent"

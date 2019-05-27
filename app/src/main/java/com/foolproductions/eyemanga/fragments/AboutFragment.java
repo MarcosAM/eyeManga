@@ -1,6 +1,7 @@
 package com.foolproductions.eyemanga.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -8,18 +9,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
+import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
+import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
+import com.foolproductions.eyemanga.readActivity.ReadActivity;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -33,7 +39,9 @@ public class AboutFragment extends Fragment {
     private TextView tvTitle, tvCategories, tvRelease, tvAuthor, tvArtist, tvDescription;
     private CardView cvDetails, cvDescription;
     private ProgressBar progressBar;
+    private Button btnContinue;
     private MangaViewModel mangaViewModel;
+    private ReadingHistoric historic;
 
     public AboutFragment() {
 
@@ -69,6 +77,7 @@ public class AboutFragment extends Fragment {
         cvDetails = view.findViewById(R.id.cvAboutDetails);
         cvDescription = view.findViewById(R.id.cvAboutDescription);
         progressBar = view.findViewById(R.id.pbAbout);
+        btnContinue = view.findViewById(R.id.btnContinue);
     }
 
     void initializeViews(Manga manga) {
@@ -92,6 +101,35 @@ public class AboutFragment extends Fragment {
             tvArtist.setVisibility(View.GONE);
         }
         tvDescription.setText(StringEscapeUtils.unescapeHtml4(manga.getDescription()));
+
+        //TODO organizar isso aqui
+        HistoricDAO dao = new HistoricDAO(getContext());
+        String mangaId = getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME);
+        if (dao.checkIfExists(mangaId)) {
+            btnContinue.setText(getString(R.string.continue_reading));
+            historic = dao.getReadingHistoric(mangaId);
+            btnContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    continueReadingFromLastPage();
+                }
+            });
+        } else {
+            btnContinue.setText(getString(R.string.start_reading));
+        }
+    }
+
+    public void continueReadingFromLastPage() {
+        //TODO reaproveitar o código acima
+        if (historic != null) {
+            Intent intent = new Intent(getContext(), ReadActivity.class);
+            intent.putExtra(ReadActivity.EXTRA_NAME, historic.getChapterId());
+            intent.putExtra(MangaActivity.EXTRA_NAME, historic.getId());
+            intent.putExtra(ReadActivity.EXTRA_PAGE, historic.getPage());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Histórico nulo, fuck!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     void setIsLoading(Boolean isLoading) {
@@ -99,10 +137,12 @@ public class AboutFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             cvDetails.setVisibility(View.GONE);
             cvDescription.setVisibility(View.GONE);
+            btnContinue.setVisibility(View.GONE);
         } else {
             progressBar.setVisibility(View.GONE);
             cvDetails.setVisibility(View.VISIBLE);
             cvDescription.setVisibility(View.VISIBLE);
+            btnContinue.setVisibility(View.VISIBLE);
         }
     }
 }
