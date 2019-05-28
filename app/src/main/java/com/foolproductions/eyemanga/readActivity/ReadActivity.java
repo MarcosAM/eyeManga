@@ -40,6 +40,15 @@ public class ReadActivity extends AppCompatActivity {
 
         btnNextChapter = findViewById(R.id.btnNextChapter);
         btnNextChapter.setVisibility(View.GONE);
+        btnNextChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!readViewModel.goToNextChapter()) {
+                    //TODO relatar que deu erro!
+                    //TODO tirar a visibilidade do botão de continuar ao iniciar novamente a recycler com o próximo capítulo
+                }
+            }
+        });
         recyclerView = findViewById(R.id.rvRead);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -52,6 +61,8 @@ public class ReadActivity extends AppCompatActivity {
                 ReadRVAdapter adapter = new ReadRVAdapter(chapter.getImages());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
+                //TODO só fazer isso quando o chapter id do intent for igual ao atual porque quando atualizar o novo capítulo pode reiniciar o recycler view
+                //TODO no mesmo canto que o cappítulo salvo e não é isso que a gente quer!
                 //TODO ver isso aqui
                 if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
                     recyclerView.scrollToPosition(getIntent().getIntExtra(EXTRA_PAGE, 0));
@@ -76,7 +87,7 @@ public class ReadActivity extends AppCompatActivity {
         Log.i("Debbuging", "Alterei isArBottom porque é bottom é " + bottom + " e atBottom é " + isAtBottom);
         isAtBottom = bottom;
         if (bottom) {
-            if(readViewModel.hasNextChapter()){
+            if (readViewModel.hasNextChapter()) {
                 btnNextChapter.setVisibility(View.VISIBLE);
             }
         } else {
