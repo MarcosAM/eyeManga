@@ -1,5 +1,6 @@
 package com.foolproductions.eyemanga.readActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,14 +26,19 @@ public class ReadActivity extends AppCompatActivity {
     public static final String EXTRA_PAGE = "page";
 
     private RecyclerView recyclerView;
+    private Button btnNextChapter;
     private ReadViewModel readViewModel;
     private LinearLayoutManager layoutManager = new LinearLayoutManager(ReadActivity.this);
+
+    private boolean isAtBottom = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
 
+        btnNextChapter = findViewById(R.id.btnNextChapter);
+        btnNextChapter.setVisibility(View.GONE);
         recyclerView = findViewById(R.id.rvRead);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -46,8 +54,30 @@ public class ReadActivity extends AppCompatActivity {
                 if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
                     recyclerView.scrollToPosition(getIntent().getIntExtra(EXTRA_PAGE, 0));
                 }
+
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+
+                        setAtBottom(!recyclerView.canScrollVertically(1));
+                    }
+                });
             }
         });
+    }
+
+    private void setAtBottom(boolean bottom) {
+        if (isAtBottom == bottom) {
+            return;
+        }
+        Log.i("Debbuging", "Alterei isArBottom porque é bottom é " + bottom + " e atBottom é " + isAtBottom);
+        isAtBottom = bottom;
+        if (bottom) {
+            btnNextChapter.setVisibility(View.VISIBLE);
+        } else {
+            btnNextChapter.setVisibility(View.GONE);
+        }
     }
 
     @Override
