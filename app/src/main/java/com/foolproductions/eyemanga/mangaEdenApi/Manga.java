@@ -1,17 +1,18 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Manga {
+public class Manga implements Serializable {
 
-    String title;
-    String description;
-    String image;
-    String released;
-    String author;
-    String artist;
-    List<String> categories;
-    List<List<String>> chapters;
+    private String title;
+    private String description;
+    private String image;
+    private String released;
+    private String author;
+    private String artist;
+    private List<String> categories;
+    private List<List<String>> chapters;
 
     public String getTitle() {
         return title;

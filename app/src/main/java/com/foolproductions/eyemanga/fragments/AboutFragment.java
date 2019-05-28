@@ -40,6 +40,7 @@ public class AboutFragment extends Fragment {
     private CardView cvDetails, cvDescription;
     private ProgressBar progressBar;
     private Button btnContinue;
+    private Manga manga;
     private MangaViewModel mangaViewModel;
     private ReadingHistoric historic;
 
@@ -129,6 +130,8 @@ public class AboutFragment extends Fragment {
                 btnContinue.setVisibility(View.GONE);
             }
         }
+
+        this.manga = manga;
     }
 
     public void startReadingFromFirstChapter(String chapterId) {
@@ -136,6 +139,7 @@ public class AboutFragment extends Fragment {
         //TODO refatorar isso aqui essa função e a continueReading... são muito parecidas
         intent.putExtra(ReadActivity.EXTRA_NAME, chapterId);
         intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
+        intent.putExtra("serializedManga", manga);
         startActivity(intent);
     }
 
@@ -146,6 +150,7 @@ public class AboutFragment extends Fragment {
             intent.putExtra(ReadActivity.EXTRA_NAME, historic.getChapterId());
             intent.putExtra(MangaActivity.EXTRA_NAME, historic.getId());
             intent.putExtra(ReadActivity.EXTRA_PAGE, historic.getPage());
+            intent.putExtra("serializedManga", manga);
             startActivity(intent);
         } else {
             Toast.makeText(getContext(), "Histórico nulo, fuck!", Toast.LENGTH_SHORT).show();

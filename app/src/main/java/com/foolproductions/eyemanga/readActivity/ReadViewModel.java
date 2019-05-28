@@ -19,13 +19,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ReadViewModel extends ViewModel {
     MutableLiveData<Chapter> chapter = new MutableLiveData<>();
     String chapterId;
+    Manga manga;
 
     public MutableLiveData<Chapter> getChapter() {
         return chapter;
     }
 
     public void setChapterId(String chapterId) {
+        //TODO não ficar criando tudo isso aqui de novo toda vez que for mudar de capítulo
         if (this.chapterId != chapterId) {
+            this.chapterId = chapterId;
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(MangaEdenURLs.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -46,5 +49,15 @@ public class ReadViewModel extends ViewModel {
                 }
             });
         }
+    }
+
+    public void setManga(Manga manga) {
+        this.manga = manga;
+    }
+
+    public boolean hasNextChapter() {
+        //TODO outra parte do código que está pegando o mágico número 3
+        Log.i("Debbuging", "O código do último capítulo é :" + manga.getChapters().get(0).get(3) + " o código to atual é: " + chapterId);
+        return !manga.getChapters().get(0).get(3).equals(chapterId);
     }
 }

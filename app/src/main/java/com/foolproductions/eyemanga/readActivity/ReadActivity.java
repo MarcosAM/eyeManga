@@ -19,6 +19,7 @@ import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
+import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -43,6 +44,7 @@ public class ReadActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         readViewModel = ViewModelProviders.of(this).get(ReadViewModel.class);
+        readViewModel.setManga((Manga) getIntent().getSerializableExtra("serializedManga"));
         readViewModel.setChapterId(getIntent().getStringExtra(EXTRA_NAME));
         readViewModel.getChapter().observe(this, new Observer<Chapter>() {
             @Override
@@ -74,7 +76,9 @@ public class ReadActivity extends AppCompatActivity {
         Log.i("Debbuging", "Alterei isArBottom porque é bottom é " + bottom + " e atBottom é " + isAtBottom);
         isAtBottom = bottom;
         if (bottom) {
-            btnNextChapter.setVisibility(View.VISIBLE);
+            if(readViewModel.hasNextChapter()){
+                btnNextChapter.setVisibility(View.VISIBLE);
+            }
         } else {
             btnNextChapter.setVisibility(View.GONE);
         }
