@@ -1,10 +1,13 @@
 package com.foolproductions.eyemanga.readActivity;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
+import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenService;
@@ -22,39 +25,33 @@ public class ReadViewModel extends ViewModel {
     MutableLiveData<Chapter> chapter = new MutableLiveData<>();
     String chapterId;
     Manga manga;
+    MangaEdenService service;
+    HistoricDAO historicDAO;
 
     public MutableLiveData<Chapter> getChapter() {
         return chapter;
     }
 
-    public void setChapterId(String chapterId) {
-        //TODO não ficar criando tudo isso aqui de novo toda vez que for mudar de capítulo
-        if (this.chapterId != chapterId) {
-            this.chapterId = chapterId;
+    public void initIfNecessery(Context context, Manga manga, String chapterId) {
+        if (historicDAO == null) {
+            historicDAO = new HistoricDAO(context);
+        }
+
+        if (service == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(MangaEdenURLs.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            MangaEdenService service = retrofit.create(MangaEdenService.class);
-            Call<Chapter> chapterCall = service.getChapter(chapterId);
-            chapterCall.enqueue(new Callback<Chapter>() {
-                @Override
-                public void onResponse(Call<Chapter> call, Response<Chapter> response) {
-                    if (response.isSuccessful()) {
-                        chapter.setValue(response.body());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Chapter> call, Throwable t) {
-
-                }
-            });
+            service = retrofit.create(MangaEdenService.class);
         }
-    }
 
-    public void setManga(Manga manga) {
-        this.manga = manga;
+        if (this.manga == null) {
+            setManga(manga);
+        }
+
+        if (this.chapterId == null) {
+            setChapterId(chapterId);
+        }
     }
 
     public boolean hasNextChapter() {
@@ -83,5 +80,42 @@ public class ReadViewModel extends ViewModel {
         }
 
         return false;
+    }
+
+    public int getStartingPage() {
+        List<ReadingHistoric> historics = historicDAO.getList();
+        for (ReadingHistoric historic : historics) {
+            if (historic.getChapterId().equals(chapterId)) {
+                return historic.getPage();
+            }
+        }
+
+        return 0;
+    }
+
+    void setChapterId(String chapterId) {
+        this.chapterId = chapterId;
+        Call<Chapter> chapterCall = service.getChapter(chapterId);
+        chapterCall.enqueue(new Callback<Chapter>() {
+            @Override
+            public void onResponse(Call<Chapter> call, Response<Chapter> response) {
+                if (response.isSuccessful()) {
+                    chapter.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Chapter> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void setManga(Manga manga) {
+        this.manga = manga;
+    }
+
+    public HistoricDAO getHistoricDAO() {
+        return historicDAO;
     }
 }

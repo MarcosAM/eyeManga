@@ -43,18 +43,29 @@ public class ReadActivity extends AppCompatActivity {
         btnNextChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!readViewModel.goToNextChapter()) {
+                if (readViewModel.goToNextChapter()) {
+                    btnNextChapter.setVisibility(View.GONE);
+                } else {
                     //TODO relatar que deu erro!
-                    //TODO tirar a visibilidade do botão de continuar ao iniciar novamente a recycler com o próximo capítulo
                 }
             }
         });
         recyclerView = findViewById(R.id.rvRead);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                setAtBottom(!recyclerView.canScrollVertically(1));
+            }
+        });
 
         readViewModel = ViewModelProviders.of(this).get(ReadViewModel.class);
-        readViewModel.setManga((Manga) getIntent().getSerializableExtra("serializedManga"));
-        readViewModel.setChapterId(getIntent().getStringExtra(EXTRA_NAME));
+        readViewModel.initIfNecessery(
+                getApplicationContext(),
+                (Manga) getIntent().getSerializableExtra("serializedManga"),
+                getIntent().getStringExtra(EXTRA_NAME));
         readViewModel.getChapter().observe(this, new Observer<Chapter>() {
             @Override
             public void onChanged(Chapter chapter) {
@@ -64,18 +75,10 @@ public class ReadActivity extends AppCompatActivity {
                 //TODO só fazer isso quando o chapter id do intent for igual ao atual porque quando atualizar o novo capítulo pode reiniciar o recycler view
                 //TODO no mesmo canto que o cappítulo salvo e não é isso que a gente quer!
                 //TODO ver isso aqui
-                if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
+                recyclerView.scrollToPosition(readViewModel.getStartingPage());
+                /*if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
                     recyclerView.scrollToPosition(getIntent().getIntExtra(EXTRA_PAGE, 0));
-                }
-
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-
-                        setAtBottom(!recyclerView.canScrollVertically(1));
-                    }
-                });
+                }*/
             }
         });
     }
@@ -104,12 +107,11 @@ public class ReadActivity extends AppCompatActivity {
 
         } finally {
             if (page >= 0) {
-                HistoricDAO historicDAO = new HistoricDAO(getApplicationContext());
                 ReadingHistoric historic = new ReadingHistoric();
                 historic.setId(getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
                 historic.setChapterId(getIntent().getStringExtra(EXTRA_NAME));
                 historic.setPage(page);
-                historicDAO.save(historic);
+                readViewModel.getHistoricDAO().save(historic);
             }
         }
         super.onDestroy();
