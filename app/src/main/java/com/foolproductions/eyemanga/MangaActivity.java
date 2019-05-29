@@ -43,5 +43,6 @@ public class MangaActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
         smartTabLayout.setViewPager(viewPager);
+        getSupportActionBar().setElevation(0);
     }
 }

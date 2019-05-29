@@ -13,7 +13,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".readActivity.ReadActivity" />
         <activity android:name=".MangaActivity" />
-        <activity android:name=".splashScreen.SplashActivity">
+        <activity
+            android:name=".splashScreen.SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
