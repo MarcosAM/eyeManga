@@ -24,7 +24,7 @@ import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 public class ReadActivity extends AppCompatActivity {
 
     public static final String EXTRA_NAME = "chapterId";
-    public static final String EXTRA_PAGE = "page";
+    //public static final String EXTRA_PAGE = "page";
 
     private RecyclerView recyclerView;
     private Button btnNextChapter;
@@ -65,29 +65,27 @@ public class ReadActivity extends AppCompatActivity {
         readViewModel.initIfNecessery(
                 getApplicationContext(),
                 (Manga) getIntent().getSerializableExtra("serializedManga"),
+                getIntent().getStringExtra(MangaActivity.EXTRA_NAME),
                 getIntent().getStringExtra(EXTRA_NAME));
+
         readViewModel.getChapter().observe(this, new Observer<Chapter>() {
             @Override
             public void onChanged(Chapter chapter) {
                 ReadRVAdapter adapter = new ReadRVAdapter(chapter.getImages());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
-                //TODO só fazer isso quando o chapter id do intent for igual ao atual porque quando atualizar o novo capítulo pode reiniciar o recycler view
-                //TODO no mesmo canto que o cappítulo salvo e não é isso que a gente quer!
                 //TODO ver isso aqui
                 recyclerView.scrollToPosition(readViewModel.getStartingPage());
-                /*if (getIntent().getIntExtra(EXTRA_PAGE, 0) > 0) {
-                    recyclerView.scrollToPosition(getIntent().getIntExtra(EXTRA_PAGE, 0));
-                }*/
             }
         });
     }
 
     private void setAtBottom(boolean bottom) {
+        //TODO botão sempre estar funcionando no final, mas só mudar as frases de "Next Chapter" para "End"
+        //TODO fazer essa definição logo acima tbm, do event listener
         if (isAtBottom == bottom) {
             return;
         }
-        Log.i("Debbuging", "Alterei isArBottom porque é bottom é " + bottom + " e atBottom é " + isAtBottom);
         isAtBottom = bottom;
         if (bottom) {
             if (readViewModel.hasNextChapter()) {
@@ -109,7 +107,7 @@ public class ReadActivity extends AppCompatActivity {
             if (page >= 0) {
                 ReadingHistoric historic = new ReadingHistoric();
                 historic.setId(getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
-                historic.setChapterId(getIntent().getStringExtra(EXTRA_NAME));
+                historic.setChapterId(readViewModel.getChapterId());
                 historic.setPage(page);
                 readViewModel.getHistoricDAO().save(historic);
             }

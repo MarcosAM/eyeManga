@@ -32,7 +32,7 @@ public class ReadViewModel extends ViewModel {
         return chapter;
     }
 
-    public void initIfNecessery(Context context, Manga manga, String chapterId) {
+    public void initIfNecessery(Context context, Manga manga, String mangaId, String chapterId) {
         if (historicDAO == null) {
             historicDAO = new HistoricDAO(context);
         }
@@ -50,6 +50,18 @@ public class ReadViewModel extends ViewModel {
         }
 
         if (this.chapterId == null) {
+            if (chapterId == null) {
+                ReadingHistoric historic = historicDAO.getReadingHistoric(mangaId);
+                if (historic == null) {
+                    Log.i("Debbuging", "Comecei a ler do início!");
+                    chapterId = manga.getChapters().get(manga.getChapters().size() - 1).get(3);
+                } else {
+                    Log.i("Debbuging", "Comecei a ler do histórico!");
+                    chapterId = historic.getChapterId();
+                }
+            } else {
+                Log.i("Debbuging", "Comecei a ler a partir de um capítulo!");
+            }
             setChapterId(chapterId);
         }
     }
@@ -109,6 +121,10 @@ public class ReadViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public String getChapterId() {
+        return chapterId;
     }
 
     void setManga(Manga manga) {

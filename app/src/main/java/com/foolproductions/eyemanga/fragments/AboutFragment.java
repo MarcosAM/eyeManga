@@ -16,13 +16,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
-import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
-import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
 import com.foolproductions.eyemanga.readActivity.ReadActivity;
@@ -42,7 +39,7 @@ public class AboutFragment extends Fragment {
     private Button btnContinue;
     private Manga manga;
     private MangaViewModel mangaViewModel;
-    private ReadingHistoric historic;
+    //private ReadingHistoric historic;
 
     public AboutFragment() {
 
@@ -103,8 +100,19 @@ public class AboutFragment extends Fragment {
         }
         tvDescription.setText(StringEscapeUtils.unescapeHtml4(manga.getDescription()));
 
+        if (manga.getChapters().size() <= 0) {
+            btnContinue.setVisibility(View.GONE);
+        } else {
+            btnContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startContinueReading();
+                }
+            });
+        }
+
         //TODO organizar isso aqui
-        HistoricDAO dao = new HistoricDAO(getContext());
+        /*HistoricDAO dao = new HistoricDAO(getContext());
         String mangaId = getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME);
         if (dao.checkIfExists(mangaId)) {
             btnContinue.setText(getString(R.string.continue_reading));
@@ -129,12 +137,19 @@ public class AboutFragment extends Fragment {
                 //TODO pensar num feedback ao usuário de porque esse manga não tem capítulo algum
                 btnContinue.setVisibility(View.GONE);
             }
-        }
+        }*/
 
         this.manga = manga;
     }
 
-    public void startReadingFromFirstChapter(String chapterId) {
+    public void startContinueReading() {
+        Intent intent = new Intent(getContext(), ReadActivity.class);
+        intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
+        intent.putExtra("serializedManga", manga);
+        startActivity(intent);
+    }
+
+    /*public void startReadingFromFirstChapter(String chapterId) {
         Intent intent = new Intent(getContext(), ReadActivity.class);
         //TODO refatorar isso aqui essa função e a continueReading... são muito parecidas
         intent.putExtra(ReadActivity.EXTRA_NAME, chapterId);
@@ -155,7 +170,7 @@ public class AboutFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Histórico nulo, fuck!", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     void setIsLoading(Boolean isLoading) {
         if (isLoading) {
