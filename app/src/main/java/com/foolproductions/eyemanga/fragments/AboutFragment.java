@@ -38,8 +38,6 @@ public class AboutFragment extends Fragment {
     private ProgressBar progressBar;
     private Button btnContinue;
     private Manga manga;
-    private MangaViewModel mangaViewModel;
-    //private ReadingHistoric historic;
 
     public AboutFragment() {
 
@@ -53,7 +51,7 @@ public class AboutFragment extends Fragment {
         findViews(view);
         setIsLoading(true);
 
-        mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
+        MangaViewModel mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
         mangaViewModel.getManga().observe(this, new Observer<Manga>() {
             @Override
             public void onChanged(Manga manga) {
@@ -64,7 +62,7 @@ public class AboutFragment extends Fragment {
         return view;
     }
 
-    void findViews(View view) {
+    private void findViews(View view) {
         ivCover = view.findViewById(R.id.ivAboutCover);
         tvTitle = view.findViewById(R.id.tvAboutTitle);
         tvCategories = view.findViewById(R.id.tvAboutCategories);
@@ -78,7 +76,7 @@ public class AboutFragment extends Fragment {
         btnContinue = view.findViewById(R.id.btnContinue);
     }
 
-    void initializeViews(final Manga manga) {
+    private void initializeViews(final Manga manga) {
         Picasso.get().load(MangaEdenURLs.IMAGE_URL + manga.getImage()).placeholder(R.drawable.placeholder_cover).into(ivCover);
         tvTitle.setText(manga.getTitle());
 
@@ -110,69 +108,17 @@ public class AboutFragment extends Fragment {
                 }
             });
         }
-
-        //TODO organizar isso aqui
-        /*HistoricDAO dao = new HistoricDAO(getContext());
-        String mangaId = getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME);
-        if (dao.checkIfExists(mangaId)) {
-            btnContinue.setText(getString(R.string.continue_reading));
-            historic = dao.getReadingHistoric(mangaId);
-            btnContinue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    continueReadingFromLastPage();
-                }
-            });
-        } else {
-            if (manga.getChapters().size() > 0) {
-                btnContinue.setText(getString(R.string.start_reading));
-                btnContinue.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //TODO trasformar esse 3 para acessar a id do capítulo em uma variável talvez
-                        startReadingFromFirstChapter(manga.getChapters().get(manga.getChapters().size() - 1).get(3));
-                    }
-                });
-            } else {
-                //TODO pensar num feedback ao usuário de porque esse manga não tem capítulo algum
-                btnContinue.setVisibility(View.GONE);
-            }
-        }*/
-
         this.manga = manga;
     }
 
-    public void startContinueReading() {
+    private void startContinueReading() {
         Intent intent = new Intent(getContext(), ReadActivity.class);
         intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
         intent.putExtra("serializedManga", manga);
         startActivity(intent);
     }
 
-    /*public void startReadingFromFirstChapter(String chapterId) {
-        Intent intent = new Intent(getContext(), ReadActivity.class);
-        //TODO refatorar isso aqui essa função e a continueReading... são muito parecidas
-        intent.putExtra(ReadActivity.EXTRA_NAME, chapterId);
-        intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
-        intent.putExtra("serializedManga", manga);
-        startActivity(intent);
-    }
-
-    public void continueReadingFromLastPage() {
-        //TODO reaproveitar o código acima
-        if (historic != null) {
-            Intent intent = new Intent(getContext(), ReadActivity.class);
-            intent.putExtra(ReadActivity.EXTRA_NAME, historic.getChapterId());
-            intent.putExtra(MangaActivity.EXTRA_NAME, historic.getId());
-            intent.putExtra(ReadActivity.EXTRA_PAGE, historic.getPage());
-            intent.putExtra("serializedManga", manga);
-            startActivity(intent);
-        } else {
-            Toast.makeText(getContext(), "Histórico nulo, fuck!", Toast.LENGTH_SHORT).show();
-        }
-    }*/
-
-    void setIsLoading(Boolean isLoading) {
+    private void setIsLoading(Boolean isLoading) {
         if (isLoading) {
             progressBar.setVisibility(View.VISIBLE);
             cvDetails.setVisibility(View.GONE);
