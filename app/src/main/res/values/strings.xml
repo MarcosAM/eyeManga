@@ -6,4 +6,6 @@
     <string name="logo_description">It\'s the app logo</string>
     <string name="powered_by">Powered By Manga Eden</string>
     <string name="manga_title">Manga Title</string>
+    <string name="failed_to_connect">Failed to connect to the internet ;-;</string>
+    <string name="try_again">Try again?</string>
 </resources>
