@@ -2,10 +2,8 @@ package com.foolproductions.eyemanga;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
