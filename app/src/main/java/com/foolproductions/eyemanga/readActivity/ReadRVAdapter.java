@@ -41,7 +41,7 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
         holder.photoView.setVisibility(View.GONE);
         Picasso.get()
                 .load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1))
-                .transform(new CheckForRotationTransformation()).error(R.drawable.placeholder_cover).
+                .transform(new CheckForRotationTransformation()).error(R.drawable.ic_eyemanga_logo).
                 into(holder.photoView, new Callback() {
                     @Override
                     public void onSuccess() {

@@ -10,7 +10,8 @@
     View-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="6dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@drawable/ic_eyemanga_logo" />
 
             <TextView
                 android:id="@+id/tvTitle"

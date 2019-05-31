@@ -43,7 +43,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     @Override
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
-        Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.placeholder_cover).into(mangaViewHolder.cover);
+        Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.ic_eyemanga_logo).into(mangaViewHolder.cover);
         mangaViewHolder.mangaId = mangas.get(i).getI();
     }
 
@@ -128,6 +128,8 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             title = itemView.findViewById(R.id.tvTitle);
             cover = itemView.findViewById(R.id.ivCover);
 
+
+            //TODO fazer com que o recycer view cuide disso!
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
