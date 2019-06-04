@@ -51,7 +51,7 @@ public class ReadViewModel extends ViewModel {
 
         if (this.chapterId == null) {
             if (chapterId == null) {
-                ReadingHistoric historic = historicDAO.getReadingHistoric(mangaId);
+                ReadingHistoric historic = historicDAO.getManga(mangaId);
                 if (historic == null) {
                     Log.i("Debbuging", "Comecei a ler do início!");
                     chapterId = manga.getChapters().get(manga.getChapters().size() - 1).get(3);

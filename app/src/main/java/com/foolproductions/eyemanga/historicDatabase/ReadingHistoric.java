@@ -1,7 +1,7 @@
 package com.foolproductions.eyemanga.historicDatabase;
 
 public class ReadingHistoric {
-    private String id;
+    /*private String id;
     private String chapterId;
     private int page;
 
@@ -27,5 +27,5 @@ public class ReadingHistoric {
 
     public void setPage(int page) {
         this.page = page;
-    }
+    }*/
 }

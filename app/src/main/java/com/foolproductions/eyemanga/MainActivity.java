@@ -15,9 +15,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -41,18 +43,27 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rvMangaList);
         progressBar = findViewById(R.id.pbMainActivity);
 
-        setIsLoading(false);
         initializeRecyclerView();
         createFilterChips();
 
         //TODO deletar isso aqui
         HistoricDAO dao = new HistoricDAO(MainActivity.this);
-        List<ReadingHistoric> historics = dao.getList();
-        for (ReadingHistoric historic : historics) {
-            Log.i("Debbuging", " ID: " + historic.getId());
-            Log.i("Debbuging", " Chapter ID " + historic.getChapterId());
-            Log.i("Debbuging", "Última página " + String.valueOf(historic.getPage()));
+        List<MangaListItem> mangas = dao.getList();
+        for (MangaListItem manga : mangas) {
+            Log.i("Debbuging", " ID: " + manga.getI());
+            Log.i("Debbuging", " Title: " + manga.getT());
+            Log.i("Debbuging", " Image: " + manga.getIm());
+            Log.i("Debbuging", " Chapter ID " + manga.getChapterId());
+            Log.i("Debbuging", "Última página " + String.valueOf(manga.getPage()));
         }
+    }
+
+    void initializeRecyclerView() {
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new MangaRVAdapter(MangaManager.getMangaListItens(), MainActivity.this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     void createFilterChips() {
@@ -79,21 +90,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void initializeRecyclerView() {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new MangaRVAdapter(MangaManager.getMangaListItens());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.maintoolbar_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search_icon);
         searchView = (SearchView) menuItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        /*searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Desfocado!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });*/
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    void setIsLoading(Boolean isLoading) {
+    /*void setIsLoading(Boolean isLoading) {
         if (isLoading) {
             recyclerView.setVisibility(View.GONE);
             chipGroup.setVisibility(View.GONE);
@@ -128,5 +131,5 @@ public class MainActivity extends AppCompatActivity {
             chipGroup.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
-    }
+    }*/
 }

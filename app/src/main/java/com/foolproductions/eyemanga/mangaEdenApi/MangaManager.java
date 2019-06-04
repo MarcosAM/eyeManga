@@ -1,8 +1,5 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,34 +61,9 @@ public class MangaManager {
         return categories;
     }
 
-    /*public static void setFetchMangaListener(final FetchMangaListener listener, String mangaId) {
-        Call<Manga> mangaCall = service.getManga(mangaId);
-        mangaCall.enqueue(new Callback<Manga>() {
-            @Override
-            public void onResponse(Call<Manga> call, Response<Manga> response) {
-                if (response.isSuccessful()) {
-                    listener.onSuccess(response.body());
-                } else {
-                    listener.onFailure();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Manga> call, Throwable t) {
-                listener.onFailure();
-            }
-        });
-    }*/
-
     public interface MangaManagerInitializationListener {
-        public void onSuccess();
+        void onSuccess();
 
-        public void onFailure();
+        void onFailure();
     }
-
-    /*public interface FetchMangaListener {
-        public void onSuccess(Manga manga);
-
-        public void onFailure();
-    }*/
 }

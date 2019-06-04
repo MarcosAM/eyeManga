@@ -3,6 +3,7 @@ package com.foolproductions.eyemanga;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
@@ -26,11 +28,16 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     private List<MangaListItem> mangas = new ArrayList<>();
     private List<String> selectedCategories = new ArrayList<>();
 
-    public MangaRVAdapter(List<MangaListItem> mangas) {
+    HistoricDAO dao;
+    private boolean isSearching = false;
+
+    public MangaRVAdapter(List<MangaListItem> mangas, Context context) {
         this.mangas.clear();
         this.mangas.addAll(mangas);
         this.allMangas.clear();
         this.allMangas.addAll(MangaManager.getMangaListItens());
+
+        this.dao = new HistoricDAO(context);
     }
 
     @NonNull
@@ -62,31 +69,35 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<MangaListItem> filteredMangas = new ArrayList<>();
 
-            if (charSequence == null || charSequence.length() == 0) {
-                if (selectedCategories.size() > 0) {
-                    for (MangaListItem manga : allMangas) {
-                        if (manga.getC().containsAll(selectedCategories)) {
-                            filteredMangas.add(manga);
+            if (isSearching) {
+                if (charSequence == null || charSequence.length() == 0) {
+                    if (selectedCategories.size() > 0) {
+                        for (MangaListItem manga : allMangas) {
+                            if (manga.getC().containsAll(selectedCategories)) {
+                                filteredMangas.add(manga);
+                            }
                         }
+                    } else {
+                        filteredMangas.addAll(allMangas);
                     }
                 } else {
-                    filteredMangas.addAll(allMangas);
+                    String filter = charSequence.toString().toLowerCase().trim();
+                    if (selectedCategories.size() > 0) {
+                        for (MangaListItem manga : allMangas) {
+                            if (manga.getT().toLowerCase().contains(filter) && manga.getC().containsAll(selectedCategories)) {
+                                filteredMangas.add(manga);
+                            }
+                        }
+                    } else {
+                        for (MangaListItem manga : allMangas) {
+                            if (manga.getT().toLowerCase().contains(filter)) {
+                                filteredMangas.add(manga);
+                            }
+                        }
+                    }
                 }
             } else {
-                String filter = charSequence.toString().toLowerCase().trim();
-                if (selectedCategories.size() > 0) {
-                    for (MangaListItem manga : allMangas) {
-                        if (manga.getT().toLowerCase().contains(filter) && manga.getC().containsAll(selectedCategories)) {
-                            filteredMangas.add(manga);
-                        }
-                    }
-                } else {
-                    for (MangaListItem manga : allMangas) {
-                        if (manga.getT().toLowerCase().contains(filter)) {
-                            filteredMangas.add(manga);
-                        }
-                    }
-                }
+                filteredMangas.addAll(dao.getList());
             }
 
             FilterResults results = new FilterResults();
@@ -114,6 +125,14 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             selectedCategories.remove(category);
             titleFilter.filter(searchInput);
         }
+    }
+
+    public void setIsSearching(boolean isSearching) {
+        if (this.isSearching == isSearching) {
+            return;
+        }
+        this.isSearching = isSearching;
+        titleFilter.filter("");
     }
 
     public static class MangaViewHolder extends RecyclerView.ViewHolder {

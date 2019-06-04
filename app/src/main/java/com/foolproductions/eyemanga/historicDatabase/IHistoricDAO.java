@@ -1,12 +1,14 @@
 package com.foolproductions.eyemanga.historicDatabase;
 
+import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+
 import java.util.List;
 
 public interface IHistoricDAO {
 
-    boolean save(ReadingHistoric historic);
+    boolean save(MangaListItem historic);
 
-    boolean delete(ReadingHistoric historic);
+    boolean delete(MangaListItem historic);
 
-    List<ReadingHistoric> getList();
+    List<MangaListItem> getList();
 }
