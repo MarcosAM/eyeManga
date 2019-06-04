@@ -1,5 +1,7 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class MangaManager {
     private static MangaList mangaList;
     private static List<String> categories = new ArrayList<>();
     private static MangaEdenService service;
+    private static MangaListItem selectedManga;
 
     public static void initialize(final MangaManagerInitializationListener listener) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -65,5 +68,13 @@ public class MangaManager {
         void onSuccess();
 
         void onFailure();
+    }
+
+    public static MangaListItem getSelectedManga() {
+        return selectedManga;
+    }
+
+    public static void setSelectedManga(MangaListItem selectedManga) {
+        MangaManager.selectedManga = selectedManga;
     }
 }

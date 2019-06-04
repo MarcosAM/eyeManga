@@ -2,6 +2,7 @@ package com.foolproductions.eyemanga;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,14 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
-import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
+import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenService;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,8 +22,18 @@ public class MangaViewModel extends ViewModel {
         return manga;
     }
 
-    public void setMangaId(String mangaId) {
+    public MangaViewModel() {
+        if (MangaManager.getSelectedManga() != null) {
+            setMangaId(MangaManager.getSelectedManga().getI());
+        } else {
+            //TODO da algum feedback de erro!
+        }
+    }
+
+    void setMangaId(String mangaId) {
         if (this.mangaId != mangaId) {
+            this.mangaId = mangaId;
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(MangaEdenURLs.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -39,13 +50,9 @@ public class MangaViewModel extends ViewModel {
 
                 @Override
                 public void onFailure(Call<Manga> call, Throwable t) {
-
+                    //TODO da algum feedback de erro!
                 }
             });
         }
-    }
-
-    public String getMangaId() {
-        return mangaId;
     }
 }

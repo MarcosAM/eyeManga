@@ -8,13 +8,12 @@ import android.os.Bundle;
 
 import com.foolproductions.eyemanga.fragments.AboutFragment;
 import com.foolproductions.eyemanga.chaptersTab.ChaptersFragment;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class MangaActivity extends AppCompatActivity {
-
-    public static final String EXTRA_NAME = "mangaId";
 
     private ViewPager viewPager;
     private SmartTabLayout smartTabLayout;
@@ -30,7 +29,6 @@ public class MangaActivity extends AppCompatActivity {
         smartTabLayout = findViewById(R.id.viewpagertab);
 
         mangaViewModel = ViewModelProviders.of(this).get(MangaViewModel.class);
-        mangaViewModel.setMangaId(getIntent().getStringExtra(EXTRA_NAME));
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(),

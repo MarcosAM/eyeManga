@@ -1,8 +1,9 @@
 package com.foolproductions.eyemanga.mangaEdenApi;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MangaListItem {
+public class MangaListItem implements Serializable {
 
     private String t;
     private String im;

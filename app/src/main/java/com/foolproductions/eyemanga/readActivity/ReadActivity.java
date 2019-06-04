@@ -8,18 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.R;
-import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
-import com.foolproductions.eyemanga.historicDatabase.ReadingHistoric;
 import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -64,7 +61,6 @@ public class ReadActivity extends AppCompatActivity {
         readViewModel.initIfNecessery(
                 getApplicationContext(),
                 (Manga) getIntent().getSerializableExtra("serializedManga"),
-                getIntent().getStringExtra(MangaActivity.EXTRA_NAME),
                 getIntent().getStringExtra(EXTRA_NAME));
 
         readViewModel.getChapter().observe(this, new Observer<Chapter>() {
@@ -104,8 +100,12 @@ public class ReadActivity extends AppCompatActivity {
 
         } finally {
             if (page >= 0) {
-                ReadingHistoric historic = new ReadingHistoric();
-                historic.setId(getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
+                MangaListItem historic = new MangaListItem();
+
+                historic.setI(MangaManager.getSelectedManga().getI());
+                historic.setT(MangaManager.getSelectedManga().getT());
+                historic.setIm(MangaManager.getSelectedManga().getIm());
+
                 historic.setChapterId(readViewModel.getChapterId());
                 historic.setPage(page);
                 readViewModel.getHistoricDAO().save(historic);

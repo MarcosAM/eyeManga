@@ -58,7 +58,6 @@ public class ChaptersFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(getContext(), ReadActivity.class);
                         intent.putExtra(ReadActivity.EXTRA_NAME, manga.getChapters().get(position).get(3));
-                        intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
                         intent.putExtra("serializedManga", manga);
                         startActivity(intent);
                     }

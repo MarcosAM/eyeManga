@@ -113,7 +113,6 @@ public class AboutFragment extends Fragment {
 
     private void startContinueReading() {
         Intent intent = new Intent(getContext(), ReadActivity.class);
-        intent.putExtra(MangaActivity.EXTRA_NAME, getActivity().getIntent().getStringExtra(MangaActivity.EXTRA_NAME));
         intent.putExtra("serializedManga", manga);
         startActivity(intent);
     }

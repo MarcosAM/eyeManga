@@ -12,6 +12,8 @@ import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenService;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class ReadViewModel extends ViewModel {
         return chapter;
     }
 
-    public void initIfNecessery(Context context, Manga manga, String mangaId, String chapterId) {
+    public void initIfNecessery(Context context, Manga manga, String chapterId) {
         if (historicDAO == null) {
             historicDAO = new HistoricDAO(context);
         }
@@ -51,13 +53,13 @@ public class ReadViewModel extends ViewModel {
 
         if (this.chapterId == null) {
             if (chapterId == null) {
-                ReadingHistoric historic = historicDAO.getManga(mangaId);
-                if (historic == null) {
+                MangaListItem mangaListItem = historicDAO.getManga(MangaManager.getSelectedManga().getI());
+                if (mangaListItem == null) {
                     Log.i("Debbuging", "Comecei a ler do início!");
                     chapterId = manga.getChapters().get(manga.getChapters().size() - 1).get(3);
                 } else {
                     Log.i("Debbuging", "Comecei a ler do histórico!");
-                    chapterId = historic.getChapterId();
+                    chapterId = mangaListItem.getChapterId();
                 }
             } else {
                 Log.i("Debbuging", "Comecei a ler a partir de um capítulo!");
@@ -95,8 +97,8 @@ public class ReadViewModel extends ViewModel {
     }
 
     public int getStartingPage() {
-        List<ReadingHistoric> historics = historicDAO.getList();
-        for (ReadingHistoric historic : historics) {
+        List<MangaListItem> historics = historicDAO.getList();
+        for (MangaListItem historic : historics) {
             if (historic.getChapterId().equals(chapterId)) {
                 return historic.getPage();
             }

@@ -29,7 +29,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     private List<String> selectedCategories = new ArrayList<>();
 
     HistoricDAO dao;
-    private boolean isSearching = false;
+    private boolean isSearching = true;
 
     public MangaRVAdapter(List<MangaListItem> mangas, Context context) {
         this.mangas.clear();
@@ -51,7 +51,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
         Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.ic_eyemanga_logo).into(mangaViewHolder.cover);
-        mangaViewHolder.mangaId = mangas.get(i).getI();
+        mangaViewHolder.manga = mangas.get(i);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
 
         TextView title;
         ImageView cover;
-        String mangaId;
+        MangaListItem manga;
 
         public MangaViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -147,13 +147,11 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
             title = itemView.findViewById(R.id.tvTitle);
             cover = itemView.findViewById(R.id.ivCover);
 
-
-            //TODO fazer com que o recycer view cuide disso!
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MangaManager.setSelectedManga(manga);
                     Intent intent = new Intent(itemView.getContext(), MangaActivity.class);
-                    intent.putExtra(MangaActivity.EXTRA_NAME, mangaId);
                     itemView.getContext().startActivity(intent);
                 }
             });
