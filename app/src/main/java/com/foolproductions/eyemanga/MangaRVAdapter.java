@@ -29,7 +29,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     private List<String> selectedCategories = new ArrayList<>();
 
     HistoricDAO dao;
-    private boolean isSearching = true;
+    private boolean isSearching = false;
 
     public MangaRVAdapter(List<MangaListItem> mangas, Context context) {
         this.mangas.clear();
@@ -128,9 +128,6 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     }
 
     public void setIsSearching(boolean isSearching) {
-        if (this.isSearching == isSearching) {
-            return;
-        }
         this.isSearching = isSearching;
         titleFilter.filter("");
     }

@@ -2,7 +2,6 @@ package com.foolproductions.eyemanga;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,15 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
-import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -47,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         initializeRecyclerView();
         createFilterChips();
+        setIsSearching(false);
 
         //TODO deletar isso aqui
         HistoricDAO dao = new HistoricDAO(MainActivity.this);
@@ -101,11 +98,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    Toast.makeText(MainActivity.this, "Focado!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Desfocado!", Toast.LENGTH_SHORT).show();
-                }
+                setIsSearching(b);
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -121,6 +114,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    void setIsSearching(boolean isSearching) {
+        if (isSearching) {
+            chipGroup.setVisibility(View.VISIBLE);
+        } else {
+            chipGroup.setVisibility(View.GONE);
+        }
+        adapter.setIsSearching(isSearching);
     }
 
     /*void setIsLoading(Boolean isLoading) {
