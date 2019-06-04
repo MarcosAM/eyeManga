@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
@@ -95,10 +96,17 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.search_icon);
         searchView = (SearchView) menuItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                setIsSearching(b);
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                setIsSearching(true);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                setIsSearching(false);
+                return true;
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
