@@ -2,6 +2,7 @@ package com.foolproductions.eyemanga;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
+import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -45,17 +47,6 @@ public class MainActivity extends AppCompatActivity {
         initializeRecyclerView();
         createFilterChips();
         setIsSearching(false);
-
-        //TODO deletar isso aqui
-        HistoricDAO dao = new HistoricDAO(MainActivity.this);
-        List<MangaListItem> mangas = dao.getList();
-        for (MangaListItem manga : mangas) {
-            Log.i("Debbuging", " ID: " + manga.getI());
-            Log.i("Debbuging", " Title: " + manga.getT());
-            Log.i("Debbuging", " Image: " + manga.getIm());
-            Log.i("Debbuging", " Chapter ID " + manga.getChapterId());
-            Log.i("Debbuging", "Última página " + String.valueOf(manga.getPage()));
-        }
     }
 
     void initializeRecyclerView() {
@@ -64,6 +55,25 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MangaRVAdapter(MangaManager.getMangaListItens(), MainActivity.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(MainActivity.this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                MangaManager.setSelectedManga(adapter.getManga(position));
+                Intent intent = new Intent(MainActivity.this, MangaActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        }));
     }
 
     void createFilterChips() {
@@ -73,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
             final Chip chip = new Chip(MainActivity.this);
             chip.setCheckable(true);
             chip.setText(category);
-            chip.setId(View.generateViewId());
 
             chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -132,16 +141,4 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter.setIsSearching(isSearching);
     }
-
-    /*void setIsLoading(Boolean isLoading) {
-        if (isLoading) {
-            recyclerView.setVisibility(View.GONE);
-            chipGroup.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            chipGroup.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-        }
-    }*/
 }

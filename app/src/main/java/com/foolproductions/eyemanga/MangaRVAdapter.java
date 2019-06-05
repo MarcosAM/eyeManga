@@ -28,10 +28,10 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     private List<MangaListItem> mangas = new ArrayList<>();
     private List<String> selectedCategories = new ArrayList<>();
 
-    HistoricDAO dao;
+    private HistoricDAO dao;
     private boolean isSearching = false;
 
-    public MangaRVAdapter(List<MangaListItem> mangas, Context context) {
+    MangaRVAdapter(List<MangaListItem> mangas, Context context) {
         this.mangas.clear();
         this.mangas.addAll(mangas);
         this.allMangas.clear();
@@ -51,7 +51,6 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
     public void onBindViewHolder(@NonNull MangaViewHolder mangaViewHolder, int i) {
         mangaViewHolder.title.setText(mangas.get(i).getT());
         Picasso.get().load(MangaEdenURLs.IMAGE_URL + mangas.get(i).getIm()).placeholder(R.drawable.ic_eyemanga_logo).into(mangaViewHolder.cover);
-        mangaViewHolder.manga = mangas.get(i);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
         return titleFilter;
     }
 
-    Filter titleFilter = new Filter() {
+    private Filter titleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<MangaListItem> filteredMangas = new ArrayList<>();
@@ -113,45 +112,37 @@ public class MangaRVAdapter extends RecyclerView.Adapter<MangaRVAdapter.MangaVie
         }
     };
 
-    public void addCategoryFilter(String category, CharSequence searchInput) {
+    void addCategoryFilter(String category, CharSequence searchInput) {
         if (MangaManager.getCategories().contains(category)) {
             selectedCategories.add(category);
             titleFilter.filter(searchInput);
         }
     }
 
-    public void removeCategoryFilter(String category, CharSequence searchInput) {
+    void removeCategoryFilter(String category, CharSequence searchInput) {
         if (selectedCategories.contains(category)) {
             selectedCategories.remove(category);
             titleFilter.filter(searchInput);
         }
     }
 
-    public void setIsSearching(boolean isSearching) {
+    void setIsSearching(boolean isSearching) {
         this.isSearching = isSearching;
         titleFilter.filter("");
     }
 
-    public static class MangaViewHolder extends RecyclerView.ViewHolder {
+    MangaListItem getManga(int index) {
+        return mangas.get(index);
+    }
 
+    static class MangaViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         ImageView cover;
-        MangaListItem manga;
 
-        public MangaViewHolder(@NonNull final View itemView) {
+        MangaViewHolder(@NonNull final View itemView) {
             super(itemView);
-
             title = itemView.findViewById(R.id.tvTitle);
             cover = itemView.findViewById(R.id.ivCover);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MangaManager.setSelectedManga(manga);
-                    Intent intent = new Intent(itemView.getContext(), MangaActivity.class);
-                    itemView.getContext().startActivity(intent);
-                }
-            });
         }
     }
 }
