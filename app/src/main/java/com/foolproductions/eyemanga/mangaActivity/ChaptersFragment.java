@@ -1,4 +1,4 @@
-package com.foolproductions.eyemanga.chaptersTab;
+package com.foolproductions.eyemanga.mangaActivity;
 
 
 import android.content.Intent;
@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
-import com.foolproductions.eyemanga.MangaActivity;
-import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.readActivity.ReadActivity;

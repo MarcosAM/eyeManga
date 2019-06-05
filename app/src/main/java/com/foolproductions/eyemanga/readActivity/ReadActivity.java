@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;

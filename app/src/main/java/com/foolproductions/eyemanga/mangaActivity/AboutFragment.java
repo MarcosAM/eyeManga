@@ -1,4 +1,4 @@
-package com.foolproductions.eyemanga.fragments;
+package com.foolproductions.eyemanga.mangaActivity;
 
 
 import android.content.Intent;
@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.foolproductions.eyemanga.MangaActivity;
-import com.foolproductions.eyemanga.MangaViewModel;
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.Manga;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaEdenURLs;

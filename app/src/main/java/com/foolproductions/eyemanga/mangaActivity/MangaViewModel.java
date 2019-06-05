@@ -1,4 +1,4 @@
-package com.foolproductions.eyemanga;
+package com.foolproductions.eyemanga.mangaActivity;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

@@ -1,4 +1,4 @@
-package com.foolproductions.eyemanga;
+package com.foolproductions.eyemanga.mangaActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -6,9 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
-import com.foolproductions.eyemanga.fragments.AboutFragment;
-import com.foolproductions.eyemanga.chaptersTab.ChaptersFragment;
-import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+import com.foolproductions.eyemanga.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -33,9 +31,8 @@ public class MangaActivity extends AppCompatActivity {
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerItems.with(this)
-                        //TODO pegar essas strings dos values
-                        .add("About", AboutFragment.class)
-                        .add("Chapters", ChaptersFragment.class)
+                        .add(getString(R.string.about), AboutFragment.class)
+                        .add(getString(R.string.chapters), ChaptersFragment.class)
                         .create()
         );
 

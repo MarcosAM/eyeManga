@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +17,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 
-import com.foolproductions.eyemanga.historicDatabase.HistoricDAO;
-import com.foolproductions.eyemanga.mangaEdenApi.MangaListItem;
+import com.foolproductions.eyemanga.mangaActivity.MangaActivity;
 import com.foolproductions.eyemanga.mangaEdenApi.MangaManager;
 import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 import com.google.android.material.chip.Chip;

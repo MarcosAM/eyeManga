@@ -8,4 +8,6 @@
     <string name="manga_title">Manga Title</string>
     <string name="failed_to_connect">Failed to connect to the internet ;-;</string>
     <string name="try_again">Try again?</string>
+    <string name="about">About</string>
+    <string name="chapters">Chapters</string>
 </resources>

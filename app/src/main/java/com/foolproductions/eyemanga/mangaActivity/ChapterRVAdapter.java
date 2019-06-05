@@ -1,6 +1,5 @@
-package com.foolproductions.eyemanga.chaptersTab;
+package com.foolproductions.eyemanga.mangaActivity;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.foolproductions.eyemanga.MangaActivity;
 import com.foolproductions.eyemanga.R;
-import com.foolproductions.eyemanga.readActivity.ReadActivity;
 
 import java.util.List;
 
