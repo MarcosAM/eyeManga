@@ -23,17 +23,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ReadViewModel extends ViewModel {
-    MutableLiveData<Chapter> chapter = new MutableLiveData<>();
-    String chapterId;
-    Manga manga;
-    MangaEdenService service;
-    HistoricDAO historicDAO;
+    private MutableLiveData<Chapter> chapter = new MutableLiveData<>();
+    private String chapterId;
+    private Manga manga;
+    private MangaEdenService service;
+    private HistoricDAO historicDAO;
 
-    public MutableLiveData<Chapter> getChapter() {
+    MutableLiveData<Chapter> getChapter() {
         return chapter;
     }
 
-    public void initIfNecessery(Context context, Manga manga, String chapterId) {
+    void initIfNecessery(Context context, Manga manga, String chapterId) {
         if (historicDAO == null) {
             historicDAO = new HistoricDAO(context);
         }
@@ -67,17 +67,14 @@ public class ReadViewModel extends ViewModel {
         }
     }
 
-    public boolean hasNextChapter() {
-        //TODO outra parte do código que está pegando o mágico número 3
-        Log.i("Debbuging", "O código do último capítulo é :" + manga.getChapters().get(0).get(3) + " o código to atual é: " + chapterId);
+    boolean hasNextChapter() {
         return !manga.getChapters().get(0).get(3).equals(chapterId);
     }
 
-    public boolean goToNextChapter() {
+    boolean goToNextChapter() {
         if (hasNextChapter()) {
             int chapterIndex = -1;
             for (List<String> chapter : manga.getChapters()) {
-                //TODO mais uma vez o 3 mágico!
                 if (chapter.get(3).equals(chapterId)) {
                     chapterIndex = manga.getChapters().indexOf(chapter);
                     break;
@@ -86,7 +83,6 @@ public class ReadViewModel extends ViewModel {
             if (chapterIndex < 0) {
                 return false;
             } else {
-                //TODO mais uma vez o 3 mágico!
                 setChapterId(manga.getChapters().get(chapterIndex - 1).get(3));
                 return true;
             }
@@ -95,7 +91,7 @@ public class ReadViewModel extends ViewModel {
         return false;
     }
 
-    public int getStartingPage() {
+    int getStartingPage() {
         List<MangaListItem> historics = historicDAO.getList();
         for (MangaListItem historic : historics) {
             if (historic.getChapterId().equals(chapterId)) {
@@ -106,7 +102,7 @@ public class ReadViewModel extends ViewModel {
         return 0;
     }
 
-    void setChapterId(String chapterId) {
+    private void setChapterId(String chapterId) {
         this.chapterId = chapterId;
         Call<Chapter> chapterCall = service.getChapter(chapterId);
         chapterCall.enqueue(new Callback<Chapter>() {
@@ -124,7 +120,7 @@ public class ReadViewModel extends ViewModel {
         });
     }
 
-    public String getChapterId() {
+    String getChapterId() {
         return chapterId;
     }
 
@@ -132,7 +128,7 @@ public class ReadViewModel extends ViewModel {
         this.manga = manga;
     }
 
-    public HistoricDAO getHistoricDAO() {
+    HistoricDAO getHistoricDAO() {
         return historicDAO;
     }
 }

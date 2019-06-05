@@ -8,7 +8,7 @@ public interface IHistoricDAO {
 
     boolean save(MangaListItem historic);
 
-    boolean delete(MangaListItem historic);
+    boolean delete(String mangaId);
 
     List<MangaListItem> getList();
 }

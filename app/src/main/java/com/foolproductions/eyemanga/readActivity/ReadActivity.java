@@ -68,8 +68,12 @@ public class ReadActivity extends AppCompatActivity {
                 ReadRVAdapter adapter = new ReadRVAdapter(chapter.getImages());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
-                //TODO ver isso aqui
                 recyclerView.scrollToPosition(readViewModel.getStartingPage());
+                if (readViewModel.hasNextChapter()) {
+                    btnNextChapter.setText(R.string.next_chapter);
+                } else {
+                    btnNextChapter.setText(R.string.finish_manga);
+                }
             }
         });
     }

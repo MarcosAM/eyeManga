@@ -14,8 +14,8 @@ import java.util.List;
 
 public class HistoricDAO implements IHistoricDAO {
 
-    SQLiteDatabase read;
-    SQLiteDatabase write;
+    private SQLiteDatabase read;
+    private SQLiteDatabase write;
 
     public HistoricDAO(Context context) {
         DBHelper helper = new DBHelper(context);
@@ -49,9 +49,13 @@ public class HistoricDAO implements IHistoricDAO {
     }
 
     @Override
-    public boolean delete(MangaListItem manga) {
-        //TODO Fazer isso para quando o usuário terminar de ler
-        return false;
+    public boolean delete(String mangaId) {
+        try {
+            write.delete(DBHelper.TABLE_MANGAS, DBHelper.ID_COLUMN + "=?", new String[]{mangaId});
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -96,12 +100,12 @@ public class HistoricDAO implements IHistoricDAO {
         return manga;
     }
 
-    public boolean checkIfExists(String mangaId) {
+    private boolean checkIfExists(String mangaId) {
         long count = DatabaseUtils.queryNumEntries(read, DBHelper.TABLE_MANGAS, "id = ?", new String[]{mangaId});
         return count > 0;
     }
 
-    ContentValues convertMangaListItemToContentValues(MangaListItem manga) {
+    private ContentValues convertMangaListItemToContentValues(MangaListItem manga) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.ID_COLUMN, manga.getI());
         values.put(DBHelper.TITLE_COLUMN, manga.getT());

@@ -15,4 +15,6 @@
     <string name="manga_author">Author</string>
     <string name="manga_artist">Artist</string>
     <string name="manga_release">Year of Release</string>
+    <string name="next_chapter">Next Chapter</string>
+    <string name="finish_manga">Finish the manga</string>
 </resources>
