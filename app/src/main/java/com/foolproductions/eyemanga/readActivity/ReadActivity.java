@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.foolproductions.eyemanga.R;
 import com.foolproductions.eyemanga.mangaEdenApi.Chapter;
@@ -25,6 +26,7 @@ public class ReadActivity extends AppCompatActivity {
     private Button btnNextChapter;
     private ReadViewModel readViewModel;
     private LinearLayoutManager layoutManager = new LinearLayoutManager(ReadActivity.this);
+    private boolean hasFinished = false;
 
     private boolean isAtBottom = false;
 
@@ -38,10 +40,15 @@ public class ReadActivity extends AppCompatActivity {
         btnNextChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (readViewModel.goToNextChapter()) {
-                    btnNextChapter.setVisibility(View.GONE);
+                if (readViewModel.hasNextChapter()) {
+                    if (readViewModel.goToNextChapter()) {
+                        btnNextChapter.setVisibility(View.GONE);
+                    } else {
+                        Toast.makeText(ReadActivity.this, getString(R.string.failed_next_chapter), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    //TODO relatar que deu erro!
+                    hasFinished = true;
+                    finish();
                 }
             }
         });
@@ -69,33 +76,40 @@ public class ReadActivity extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.scrollToPosition(readViewModel.getStartingPage());
-                if (readViewModel.hasNextChapter()) {
-                    btnNextChapter.setText(R.string.next_chapter);
-                } else {
-                    btnNextChapter.setText(R.string.finish_manga);
-                }
+                adjustNextChapterBtn(readViewModel.hasNextChapter());
             }
         });
     }
 
     private void setAtBottom(boolean bottom) {
-        //TODO botão sempre estar funcionando no final, mas só mudar as frases de "Next Chapter" para "End"
-        //TODO fazer essa definição logo acima tbm, do event listener
         if (isAtBottom == bottom) {
             return;
         }
         isAtBottom = bottom;
         if (bottom) {
-            if (readViewModel.hasNextChapter()) {
-                btnNextChapter.setVisibility(View.VISIBLE);
-            }
+            btnNextChapter.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void adjustNextChapterBtn(boolean hasNextChapter) {
+        if (hasNextChapter) {
+            btnNextChapter.setText(R.string.next_chapter);
         } else {
-            btnNextChapter.setVisibility(View.GONE);
+            btnNextChapter.setText(R.string.finish_manga);
         }
     }
 
     @Override
     protected void onDestroy() {
+        if (hasFinished) {
+            deleteHistoric();
+        } else {
+            updateHistoric();
+        }
+        super.onDestroy();
+    }
+
+    private void updateHistoric() {
         int page = -1;
         try {
             page = layoutManager.findFirstVisibleItemPosition();
@@ -114,7 +128,10 @@ public class ReadActivity extends AppCompatActivity {
                 readViewModel.getHistoricDAO().save(historic);
             }
         }
-        super.onDestroy();
+    }
+
+    private void deleteHistoric() {
+        readViewModel.getHistoricDAO().delete(MangaManager.getSelectedManga().getI());
     }
 
     @Override

@@ -22,7 +22,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ReadViewModel extends ViewModel {
+class ReadViewModel extends ViewModel {
     private MutableLiveData<Chapter> chapter = new MutableLiveData<>();
     private String chapterId;
     private Manga manga;

@@ -17,4 +17,5 @@
     <string name="manga_release">Year of Release</string>
     <string name="next_chapter">Next Chapter</string>
     <string name="finish_manga">Finish the manga</string>
+    <string name="failed_next_chapter">Failed to load next chapter ;-;</string>
 </resources>
