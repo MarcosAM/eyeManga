@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHolder> {
 
-    List<List<String>> images;
+    private List<List<String>> images;
 
-    public ReadRVAdapter(List<List<String>> images) {
+    ReadRVAdapter(List<List<String>> images) {
         this.images = new ArrayList<>();
         this.images.addAll(images);
         Collections.reverse(this.images);
@@ -39,6 +40,7 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
     public void onBindViewHolder(@NonNull final ReadViewHolder holder, int position) {
         holder.progressBar.setVisibility(View.VISIBLE);
         holder.photoView.setVisibility(View.GONE);
+        holder.textView.setVisibility(View.GONE);
         Picasso.get()
                 .load(MangaEdenURLs.IMAGE_URL + images.get(position).get(1))
                 .transform(new CheckForRotationTransformation()).error(R.drawable.ic_eyemanga_logo).
@@ -47,11 +49,13 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
                     public void onSuccess() {
                         holder.progressBar.setVisibility(View.GONE);
                         holder.photoView.setVisibility(View.VISIBLE);
+                        holder.textView.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError(Exception e) {
-                        //TODO mudar baseado nas possíveis exceções
+                        holder.progressBar.setVisibility(View.GONE);
+                        holder.textView.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -61,15 +65,17 @@ public class ReadRVAdapter extends RecyclerView.Adapter<ReadRVAdapter.ReadViewHo
         return images.size();
     }
 
-    public static class ReadViewHolder extends RecyclerView.ViewHolder {
+    static class ReadViewHolder extends RecyclerView.ViewHolder {
         private PhotoView photoView;
         private ProgressBar progressBar;
+        private TextView textView;
 
-        public ReadViewHolder(@NonNull View itemView) {
+        ReadViewHolder(@NonNull View itemView) {
             super(itemView);
 
             photoView = itemView.findViewById(R.id.pvMangaPage);
             progressBar = itemView.findViewById(R.id.pbPage);
+            textView = itemView.findViewById(R.id.tvFailedLoadPage);
         }
     }
 }
