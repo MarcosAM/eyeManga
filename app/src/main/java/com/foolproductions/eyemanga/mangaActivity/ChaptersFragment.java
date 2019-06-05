@@ -28,12 +28,10 @@ import com.foolproductions.eyemanga.util.RecyclerItemClickListener;
 public class ChaptersFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private MangaViewModel mangaViewModel;
 
     public ChaptersFragment() {
 
     }
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -42,7 +40,7 @@ public class ChaptersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chapters, container, false);
         recyclerView = view.findViewById(R.id.rvChapters);
 
-        mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
+        MangaViewModel mangaViewModel = ViewModelProviders.of(getActivity()).get(MangaViewModel.class);
         mangaViewModel.getManga().observe(this, new Observer<Manga>() {
             @Override
             public void onChanged(final Manga manga) {

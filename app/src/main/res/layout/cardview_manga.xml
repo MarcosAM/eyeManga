@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--TODO acho que da para tirar esse Relative Layout e organizar as views dentro do Card
-    View-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +19,7 @@
                 android:id="@+id/ivCover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/cover_description"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@drawable/ic_eyemanga_logo" />
 
@@ -32,7 +30,7 @@
                 android:layout_alignBottom="@id/ivCover"
                 android:background="@color/shadowBackground"
                 android:padding="6dp"
-                android:text="Título"
+                android:text="@string/manga_title"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white" />
 

@@ -14,9 +14,9 @@ import java.util.List;
 
 public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.ChapterViewHolder> {
 
-    List<List<String>> chapters;
+    private List<List<String>> chapters;
 
-    public ChapterRVAdapter(List<List<String>> chapters) {
+    ChapterRVAdapter(List<List<String>> chapters) {
         this.chapters = chapters;
     }
 
@@ -29,8 +29,10 @@ public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.Chap
 
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
-        holder.textView.setText(chapters.get(position).get(0) + " " + chapters.get(position).get(2));
-        //holder.chapterId = chapters.get(position).get(3);
+        if (chapters.get(position).get(2) != null)
+            holder.textView.setText(chapters.get(position).get(0) + " " + chapters.get(position).get(2));
+        else
+            holder.textView.setText(chapters.get(position).get(0));
     }
 
     @Override
@@ -38,25 +40,14 @@ public class ChapterRVAdapter extends RecyclerView.Adapter<ChapterRVAdapter.Chap
         return chapters.size();
     }
 
-    public static class ChapterViewHolder extends RecyclerView.ViewHolder {
+    static class ChapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
-        //String chapterId;
 
-        public ChapterViewHolder(@NonNull final View itemView) {
+        ChapterViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.tvChapter);
-            //TODO deletar isso aqui
-            /*
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(itemView.getContext(), ReadActivity.class);
-                    intent.putExtra(ReadActivity.EXTRA_NAME, chapterId);
-                    itemView.getContext().startActivity(intent);
-                }
-            });*/
         }
     }
 }

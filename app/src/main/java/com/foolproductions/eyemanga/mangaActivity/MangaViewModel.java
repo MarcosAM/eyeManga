@@ -15,25 +15,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MangaViewModel extends ViewModel {
-    MutableLiveData<Manga> manga = new MutableLiveData<>();
-    String mangaId;
 
-    public MutableLiveData<Manga> getManga() {
-        return manga;
-    }
+    private MutableLiveData<Manga> manga = new MutableLiveData<>();
 
     public MangaViewModel() {
         if (MangaManager.getSelectedManga() != null) {
-            setMangaId(MangaManager.getSelectedManga().getI());
-        } else {
-            //TODO da algum feedback de erro!
+            fetchManga(MangaManager.getSelectedManga().getI());
         }
     }
 
-    void setMangaId(String mangaId) {
-        if (this.mangaId != mangaId) {
-            this.mangaId = mangaId;
-
+    private void fetchManga(String mangaId) {
+        if (mangaId != null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(MangaEdenURLs.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -50,9 +42,12 @@ public class MangaViewModel extends ViewModel {
 
                 @Override
                 public void onFailure(Call<Manga> call, Throwable t) {
-                    //TODO da algum feedback de erro!
                 }
             });
         }
+    }
+
+    public MutableLiveData<Manga> getManga() {
+        return manga;
     }
 }

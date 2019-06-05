@@ -13,20 +13,13 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class MangaActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private SmartTabLayout smartTabLayout;
-
-    private MangaViewModel mangaViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manga);
 
-        viewPager = findViewById(R.id.viewpager);
-        smartTabLayout = findViewById(R.id.viewpagertab);
-
-        mangaViewModel = ViewModelProviders.of(this).get(MangaViewModel.class);
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        SmartTabLayout smartTabLayout = findViewById(R.id.viewpagertab);
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(),
